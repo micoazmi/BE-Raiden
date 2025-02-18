@@ -11,7 +11,7 @@ func RegisterRoute(server *raiden.Server) {
 	server.RegisterRoute([]*raiden.Route{
 		{
 			Type:       raiden.RouteTypeCustom,
-			Path:       "/hello/{name}",
+			Path:       "/hello/{name}/",
 			Methods:    []string{fasthttp.MethodGet},
 			Controller: &controllers.HelloWordController{},
 		},
