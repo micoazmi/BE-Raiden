@@ -3,9 +3,22 @@ package bootstrap
 
 import (
 	"github.com/sev-2/raiden/pkg/resource"
+	"beraiden/internal/models"
 )
 
 func RegisterModels() {
 	resource.RegisterModels(
+		&models.Doctors{},
+		&models.Facilities{},
+		&models.Location{},
+		&models.MasterData{},
+		&models.Payments{},
+		&models.Reservations{},
+		&models.RolePermissions{},
+		&models.Schedule{},
+		&models.Services{},
+		&models.Specialization{},
+		&models.UserRoles{},
+		&models.Users{},
 	)
 }

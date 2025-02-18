@@ -3,9 +3,11 @@ package bootstrap
 
 import (
 	"github.com/sev-2/raiden/pkg/resource"
+	"beraiden/internal/rpc"
 )
 
 func RegisterRpc() {
 	resource.RegisterRpc(
+		&rpc.CustomAccessTokenHook{},
 	)
 }
