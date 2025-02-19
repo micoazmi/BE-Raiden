@@ -4,16 +4,31 @@ package bootstrap
 import (
 	"github.com/sev-2/raiden"
 	"beraiden/internal/controllers"
+	"beraiden/internal/models"
 	"github.com/valyala/fasthttp"
 )
 
 func RegisterRoute(server *raiden.Server) {
 	server.RegisterRoute([]*raiden.Route{
 		{
+			Type:       raiden.RouteTypeRest,
+			Path:       "/doctors",
+			Methods:    []string{},
+			Controller: &controllers.DoctorController{},
+			Model:      models.Doctors{},
+		},
+		{
 			Type:       raiden.RouteTypeCustom,
 			Path:       "/hello/{name}/",
 			Methods:    []string{fasthttp.MethodGet},
 			Controller: &controllers.HelloWordController{},
+		},
+		{
+			Type:       raiden.RouteTypeRest,
+			Path:       "/schedule",
+			Methods:    []string{},
+			Controller: &controllers.ScheduleController{},
+			Model:      models.Schedule{},
 		},
 	})
 }

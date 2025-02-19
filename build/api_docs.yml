@@ -1,0 +1,239 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  description: API untuk autentikasi dan data dokter.
+  version: 0.1.9
+
+servers:
+  - url: https://jinggudncxanbgnqxxgp.supabase.co
+    description: Supabase 
+  - url: http://127.0.0.1:8002
+    description: Raiden
+
+paths:
+  /auth/v1/token:
+    post:
+      summary: Sign in
+      description: Autentikasi menggunakan email dan password.
+      parameters:
+        - name: grant_type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [password]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: someone@email.com
+                password:
+                  type: string
+                  example: ZEosQsibIRbUYGmfMDpz
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: Token autentikasi berhasil dikembalikan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    example: bearer
+                  expires_in:
+                    type: integer
+                    example: 3600
+        "401":
+          description: Unauthorized - Invalid credentials
+      security:
+        - ApiKeyAuth: []
+
+  /rest/v1/schedule:
+    get:
+      summary: Mendapatkan jadwal dokter
+      responses:
+        "200":
+          description: Jadwal dokter berhasil dikembalikan
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    doctor_name:
+                      type: string
+                    schedule_time:
+                      type: string
+                      format: date-time
+      security:
+        - ApiKeyAuth: []
+        - BearerAuth: []
+
+    post:
+      summary: Menambahkan jadwal dokter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                doctor_name:
+                  type: string
+                schedule_time:
+                  type: string
+                  format: date-time
+      responses:
+        "201":
+          description: Jadwal berhasil ditambahkan
+      security:
+        - BearerAuth: []
+
+    patch:
+      summary: Memperbarui jadwal dokter
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "eq.1"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schedule_time:
+                  type: string
+                  format: date-time
+      responses:
+        "200":
+          description: Jadwal berhasil diperbarui
+      security:
+        - BearerAuth: []
+
+    delete:
+      summary: Menghapus jadwal dokter
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "eq.1"
+      responses:
+        "204":
+          description: Jadwal berhasil dihapus
+      security:
+        - BearerAuth: []
+
+  /rest/v1/doctors:
+    get:
+      summary: Mendapatkan list data dokter
+      responses:
+        "200":
+          description: List data dokter berhasil dikembalikan
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    specialization:
+                      type: string
+      security:
+        - ApiKeyAuth: []
+        - BearerAuth: []
+
+    post:
+      summary: Menambahkan data dokter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                specialization:
+                  type: string
+      responses:
+        "201":
+          description: Data dokter berhasil ditambahkan
+      security:
+        - BearerAuth: []
+
+    patch:
+      summary: Memperbarui data dokter
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "eq.1"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                specialization:
+                  type: string
+      responses:
+        "200":
+          description: Data dokter berhasil diperbarui
+      security:
+        - BearerAuth: []
+
+    delete:
+      summary: Menghapus data dokter
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "eq.1"
+      responses:
+        "204":
+          description: Data dokter berhasil dihapus
+      security:
+        - BearerAuth: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: apikey
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
